@@ -16,6 +16,7 @@ const User = require('./models/User')
 const productRoutes = require('./routes/product')
 const reviewRoutes = require('./routes/review')
 const authRoutes = require('./routes/auth')
+const cartRoutes = require('./routes/cart')
 
 mongoose.connect('mongodb://127.0.0.1:27017/shopping-app')
 .then(() => {
@@ -69,6 +70,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 app.use(productRoutes); // so that hrr incoming request ke liye path check kiya jaaye
 app.use(reviewRoutes); // so that hrr incoming request ke liye path check kiya jaaye
 app.use(authRoutes); // so that hrr incoming request ke liye path check kiya jaaye
+app.use(cartRoutes);
 
 app.listen(8080, () => {
     console.log("server connected at port 8080");

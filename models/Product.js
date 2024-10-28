@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Review = require("./Review");
+const User = require("./User");
 
 const productSchema = new mongoose.Schema({
     name: {
@@ -26,7 +27,11 @@ const productSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Review'
         }
-    ]
+    ],
+    author:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 })
 
 // middleware jo BTS mongoDB operations karwane par use hota hai and iske andar pre and post middleware hote hai which are basically used over the schema and before the model is JS Class

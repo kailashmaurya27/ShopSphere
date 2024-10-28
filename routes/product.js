@@ -2,7 +2,7 @@ const express = require('express');
 const Product = require('../models/Product');
 const Review = require('../models/Review');
 const router = express.Router();
-const {validateProduct, isLoggedIn} = require('../middleware');
+const {validateProduct, isLoggedIn, isSeller, isProductAuthor} = require('../middleware');
 
 // to show all the products
 router.get('/products', async(req, res)=>{
@@ -26,10 +26,10 @@ router.get('/product/new', isLoggedIn, (req, res)=>{
 })
 
 // to actually add the product
-router.post('/products', validateProduct, isLoggedIn, async(req,res)=>{
+router.post('/products', validateProduct, isLoggedIn, isSeller, async(req,res)=>{
     try{
-        let {name, img, price, desc} = req.body;
-        await Product.create({name, img, price, desc})
+        let {name, img, price, desc} = req.body; // request ki body se author nahi aayega 
+        await Product.create({name, img, price, desc, author:req.user._id})
         req.flash('success', 'Product added successfully');
         res.redirect('/products');
     }
@@ -77,7 +77,7 @@ router.patch('/products/:id', validateProduct, isLoggedIn, async(req, res)=>{
 })
 
 // to delete a product
-router.delete('/products/:id', isLoggedIn, async(req, res)=>{
+router.delete('/products/:id', isLoggedIn, isProductAuthor, async(req, res)=>{
     try{
         let {id} = req.params;
         const product = await Product.findById(id);

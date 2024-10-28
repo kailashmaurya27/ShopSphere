@@ -11,15 +11,15 @@ router.get('/register', (req, res)=>{
 // actually want to register a user in my DB
 router.post('/register', async(req, res)=>{
     try{
-        let {email, password, username} = req.body;
-        const user = new User({email, username})
+        let {email, password, username, role} = req.body;
+        const user = new User({email, username, role})
         const newUser = await User.register(user, password);
         // res.redirect('/login');
         req.login( newUser, function(err){
             if(err){
                 return next(err);
             }
-            req.flash('success', 'welcome')
+            req.flash('success', 'welcome, you are registered successfully')
             return res.redirect('/products');
         })
     }
