@@ -17,6 +17,8 @@ const productRoutes = require('./routes/product')
 const reviewRoutes = require('./routes/review')
 const authRoutes = require('./routes/auth')
 const cartRoutes = require('./routes/cart')
+const productApi = require('./routes/api/productapi');
+// const paymentRoutes = require('./routes/payment');
 
 mongoose.connect('mongodb://127.0.0.1:27017/shopping-app')
 .then(() => {
@@ -71,8 +73,12 @@ app.use(productRoutes); // so that hrr incoming request ke liye path check kiya 
 app.use(reviewRoutes); // so that hrr incoming request ke liye path check kiya jaaye
 app.use(authRoutes); // so that hrr incoming request ke liye path check kiya jaaye
 app.use(cartRoutes);
+app.use(productApi);
+// app.use(paymentRoutes);
 
-app.listen(8080, () => {
-    console.log("server connected at port 8080");
+const port = 8080
+
+app.listen(port, () => {
+    console.log(`Server connected at ${port}`);
     
 })
