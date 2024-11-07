@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV !== 'production'){
+    require('dotenv').config();
+}
+
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -19,6 +23,13 @@ const authRoutes = require('./routes/auth')
 const cartRoutes = require('./routes/cart')
 const productApi = require('./routes/api/productapi');
 // const paymentRoutes = require('./routes/payment');
+
+// const dbURL = process.env.dbURL || 'mongodb://127.0.0.1:27017/shopping-app';
+
+// mongoose.set('strictQuery', true);
+// mongoose.connect(dbURL)
+//     .then(()=> console.log('DB Connected'))
+//     .catch((err)=>console.log(err))
 
 mongoose.connect('mongodb://127.0.0.1:27017/shopping-app')
 .then(() => {

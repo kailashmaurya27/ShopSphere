@@ -1,50 +1,51 @@
-const mongoose = require("mongoose");
-const Review = require("./Review");
-const User = require("./User");
+const mongoose = require('mongoose');
+const Review = require('./Review');
 
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
-        trim: true, 
+        trim: true,
         required: true
     },
     img: {
         type: String,
-        trim: true, 
-        //default: 
+        trim: true,
+        default: '/images/product.jpg'
     },
     price: {
         type: Number,
-        // min: 0, 
-        required: true
+        min: 0,
+        default: 0
     },
     desc: {
         type: String,
-        trim: true 
+        trim: true
     },
     avgRating: {
         type: Number,
-        default: 0 
+        default:0 
     },
-    reviews:[
+    author:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User'
+    },
+    reviews: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Review'
+            ref:'Review'
         }
-    ],
-    author:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+    ]
+});
+
+
+
+// Mongoose middleware function to delete all the associated reviews on a product
+productSchema.post('findOneAndDelete',async function(product) {
+    if (product.reviews.length > 0) {
+        await Review.deleteMany({ _id: { $in: product.reviews } });
     }
-})
+});
 
-// middleware jo BTS mongoDB operations karwane par use hota hai and iske andar pre and post middleware hote hai which are basically used over the schema and before the model is JS Class
+const Product = mongoose.model('Product', productSchema);
 
-productSchema.post('findOneAndDelete', async function(product){
-    if(product.reviews.length > 0){
-        await Review.deleteMany({_id:{$in:product.reviews}})
-    }
-})
-
-let Product = mongoose.model('Product', productSchema);
 module.exports = Product;
